@@ -7,7 +7,7 @@ from datetime import datetime
 date = datetime.now()
 current_time = date.strftime("%H:%M:%S")
 
-with open("/ignore/config.json", "r") as config:
+with open("./ignore/config.json", "r") as config:
   data = json.load(config)
 
 intents = discord.Intents.default()
@@ -39,7 +39,6 @@ async def on_ready():
         presence = True
         await client.get_channel(data["channel"]).send(f"L'appel est ouvert : {current_time}")
       driver.back()
-    
 
 client.run(data['token'])
 
