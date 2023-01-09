@@ -6,15 +6,13 @@ from datetime import datetime
 
 date = datetime.now()
 current_time = date.strftime("%H:%M:%S")
-print(current_time)
+print("heure de debut du script " + current_time)
 
-with open(".config.json", "r") as config:
+with open("/home/ainaspro/bot/.config.json", "r") as config:
   data = json.load(config)
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
-
-
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('window-size=1200x600')
@@ -43,17 +41,21 @@ async def on_ready():
   while current_hour < target_hour and presence == False :
     date = datetime.now()
     current_hour = date.hour
+    print("verification de la presence "+ str(date.hour) + ":" + str(date.minute) + ":" + str(date.second))
     for i in [1,2]:
       driver.find_element(By.XPATH, f"//*[@id=\"body_presences\"]/tr[{i}]/td[3]/a").click()
       check = driver.find_element(By.ID,"body_presence")
       verify = check.text
       if 'Valider la présence' in verify:
         presence = True
+        print("appel ouvert")
         await client.get_channel(data["channel"]).send(f"L'appel est ouvert : {current_time}")
         break
       driver.back()
+    time.sleep(3)
 
 client.run(data['token'])
+
 
 
 
