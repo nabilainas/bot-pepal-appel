@@ -55,7 +55,3 @@ async def on_ready():
     time.sleep(3)
 
 client.run(data['token'])
-
-
-
-
