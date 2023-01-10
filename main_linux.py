@@ -46,12 +46,15 @@ async def on_ready():
       driver.find_element(By.XPATH, f"//*[@id=\"body_presences\"]/tr[{i}]/td[3]/a").click()
       check = driver.find_element(By.ID,"body_presence")
       verify = check.text
-      if 'Valider la présence' in verify:
+      if 'Valider la'in verify:
         presence = True
         print("appel ouvert")
         await client.get_channel(data["channel"]).send(f"L'appel est ouvert : {current_time}")
-        break
+        await client.close()
       driver.back()
     time.sleep(3)
 
+
 client.run(data['token'])
+
+print("end")
