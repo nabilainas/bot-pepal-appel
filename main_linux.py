@@ -51,7 +51,7 @@ async def on_ready():
       check = driver.find_element(By.ID,"body_presence")
       verify = check.text
       print("Texte afficher dans la page de presence : " + verify)
-      if 'Valider la' not in verify:
+      if 'Valider la' in verify:
         presence = True
         print("appel ouvert")
         await client.get_channel(data["channel"]).send(f"L'appel est ouvert à {str(date.hour)}:"+["0"+ str(date.minute) if len(str(date.minute)) == 1 else str(date.minute)][0]+":"+ ["0"+str(date.second) if len(str(date.second)) == 1 else str(date.second)][0] + " @everyone")  
