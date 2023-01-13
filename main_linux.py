@@ -5,8 +5,8 @@ from datetime import datetime
 
 
 date = datetime.now()
-current_time = date.strftime("%H:%M:%S")
-print("heure de debut du script " + current_time)
+print(date)
+print("heure de debut du script: " + str(date.hour) + ":" + str(date.minute) + ":" + str(date.second))
 
 with open("/home/ainaspro/bot/.config.json", "r") as config:
   data = json.load(config)
@@ -21,7 +21,11 @@ options.add_argument('window-size=1200x600')
 
 @client.event
 async def on_ready():
-  print('We have logged in as {0.user}'.format(client) + " " + current_time) 
+  date = datetime.now()
+  target_hour = date.hour + 1
+  current_hour = date.hour
+
+  print('Connexion a discord en tant que {0.user} reussi a : '.format(client) + str(date.hour) + ":" + str(date.minute) + ":" + str(date.second)) 
   url = "https://www.pepal.eu/"
   driver = webdriver.Chrome(options=options)
   driver.get(url)
@@ -34,9 +38,9 @@ async def on_ready():
   driver.find_element(By.XPATH, "/html/body/div[3]/div/div/div[3]/div/div/div/a[4]").click() 
 
   presence = False
-  date = datetime.now()
-  target_hour = date.hour + 1
-  current_hour = date.hour
+
+
+
 
   while current_hour < target_hour and presence == False :
     date = datetime.now()
@@ -46,15 +50,16 @@ async def on_ready():
       driver.find_element(By.XPATH, f"//*[@id=\"body_presences\"]/tr[{i}]/td[3]/a").click()
       check = driver.find_element(By.ID,"body_presence")
       verify = check.text
-      if 'Valider la'in verify:
+      print("Texte afficher dans la page de presence : " + verify)
+      if 'Valider la' not in verify:
         presence = True
         print("appel ouvert")
-        await client.get_channel(data["channel"]).send(f"L'appel est ouvert : {current_time}")
+        await client.get_channel(data["channel"]).send(f"L'appel est ouvert à {str(date.hour)}:"+["0"+ str(date.minute) if len(str(date.minute)) == 1 else str(date.minute)][0]+":"+ ["0"+str(date.second) if len(str(date.second)) == 1 else str(date.second)][0] + " @everyone")  
+        print("deconnexion de discord et fin du script a : " + str(date.hour) + ":" + str(date.minute) + ":" + str(date.second)) 
+        print("------------------------------------------------------------" )
         await client.close()
       driver.back()
     time.sleep(3)
 
 
 client.run(data['token'])
-
-print("end")
